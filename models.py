@@ -93,6 +93,8 @@ class User(db.Model):
         secondaryjoin=(Follows.user_being_followed_id == id)
     )
 
+    retweets = db.relationship('Retweet', backref = 'user')
+
     def __repr__(self):
         return f"<User #{self.id}: {self.username}, {self.email}>"
 
@@ -184,6 +186,8 @@ class Message(db.Model):
                                   secondary="likes", backref="messages_liked")
     
     users_retweeted = db.relationship('User', secondary="retweets", backref="messages_retweeted")
+
+    retweets = db.relationship('Retweet', backref="message")
      
     def __repr__(self):
         return f"<Message #{self.id}, User ID:{self.user_id}, Text:{self.text} @ {self.timestamp}>"
@@ -230,4 +234,10 @@ class Retweet(db.Model):
         db.Integer,
         db.ForeignKey('users.id'),
         primary_key=True
+    )
+
+    timestamp = db.Column(
+        db.DateTime,
+        nullable=False,
+        default=datetime.utcnow()
     )

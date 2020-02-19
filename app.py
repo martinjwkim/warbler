@@ -3,7 +3,8 @@ import os
 from flask import Flask, render_template, request, flash, redirect, jsonify, session, g
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy import or_
+from sqlalchemy import or_, create_engine
+from sqlalchemy.orm import sessionmaker
 
 from forms import UserAddForm, LoginForm, MessageForm, UserEditForm
 from models import db, connect_db, User, Message, Like, Retweet
@@ -11,6 +12,8 @@ from models import db, connect_db, User, Message, Like, Retweet
 CURR_USER_KEY = "curr_user"
 
 app = Flask(__name__)
+
+Session = sessionmaker()
 
 # Get DB_URI from environ variable (useful for production/testing) or,
 # if not set there, use development local db.
@@ -163,12 +166,20 @@ def users_show(user_id):
 
     # snagging messages in order from the database;
     # user.messages won't be in order by default
+    # messages = (Message
+    #             .query
+    #             .filter(or_(Message.user_id == user_id, Message.id.in_(retweeted_msg_ids)))
+    #             .order_by(Message.timestamp.desc())
+    #             .limit(100)
+    #             .all())
+
     messages = (Message
                 .query
                 .filter(or_(Message.user_id == user_id, Message.id.in_(retweeted_msg_ids)))
                 .order_by(Message.timestamp.desc())
                 .limit(100)
                 .all())
+
     return render_template('users/show.html', user=user,
                            messages=messages, current_url=current_url)
 
