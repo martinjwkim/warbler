@@ -1,8 +1,15 @@
 # Warbler
 
 An application inspired by Twitter.
-Users can create an account, explore and follow/unfollow other users, edit their profile details, post "warbles", and like warbles.
-This application began in complete collaboration/pair programmed with my peer, Richard Dowdy (we wrote and agreed on every step of the code in collaboration) and further additions were my own independently.
+Users can create an account, explore and follow/unfollow other users, edit their profile details, post "warbles", and like warbles. 
+Warbler has many similar functionalites as Twitter such as the following: 
+ - create/edit a profile
+ - explore other profiles
+ - follow other profiles
+ - post a warble (tweet)
+ - like other warbles
+ - retweet other warbles
+ - comment on other warbles
 
 ## Getting Started
 
